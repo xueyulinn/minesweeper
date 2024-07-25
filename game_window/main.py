@@ -1,6 +1,7 @@
 from tkinter import *
 import settings
 import utils
+from cell import Cell
 
 # window configuration
 root = Tk()
@@ -33,5 +34,11 @@ centerFrame = Frame(root,
                     height=utils.heightPrct(75))
 
 centerFrame.place(x=utils.widthPrct(25), y=utils.heightPrct(25))
+
+for y in range(settings.GRID_SIZE):
+    for x in range(settings.GRID_SIZE):
+        cell = Cell()
+        cell.createButton(centerFrame)
+        cell.buttonObj.grid(column=y, row=x)
 
 root.mainloop()
