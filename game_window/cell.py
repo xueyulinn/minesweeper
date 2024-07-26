@@ -1,16 +1,18 @@
-from tkinter import Button
+from tkinter import Button, Label
 import settings
 import random
 
 
 class Cell:
     all = []
+    remainingCells = settings.CELLS
 
     def __init__(self,  x, y, isMine=False):
         self.isMine = isMine
         self.buttonObj = None
         self.x = x
         self.y = y
+        self.displayed = False
         Cell.all.append(self)
 
     def createButton(self, location):
@@ -24,12 +26,6 @@ class Cell:
         btn.bind('<Button-3>', self.rightClick)
 
         self.buttonObj = btn
-
-    @staticmethod
-    def randomizeMines():
-        mines = random.sample(Cell.all, settings.MINE_COUNT)
-        for cell in mines:
-            cell.isMine = True
 
     def leftClick(self, event):
         # the tkinter will automatically pass the 'event' paramater
@@ -47,17 +43,18 @@ class Cell:
                 return cell
 
     def displayCell(self):
+        if self.displayed:
+            return
+
+        self.displayed = True
+
         if self.isMine == True:
             self.displayMine()
         else:
             if self.countMines() == 0:
                 for cell in self.getSurroundedCells():
-                    # Only display cells that have not been displayed
-                    if not cell.buttonObj["text"]:
-                        cell.displayNormalCell()
-                        cell.displayCell()  # Recursively reveal cells with no mines around
-            else:
-                self.displayNormalCell()
+                    cell.displayCell()  # Recursively reveal cells with no mines around
+            self.displayNormalCell()
 
     def displayMine(self):
         self.buttonObj.configure(bg="red")
@@ -88,3 +85,23 @@ class Cell:
 
     def displayNormalCell(self):
         self.buttonObj.configure(text=f"{self.countMines()}")
+        Cell.remainingCells -= 1
+
+        if Cell.labelObj:
+            Cell.labelObj.configure(text=f"Remaining Cells: {
+                                    Cell.remainingCells}")
+
+    @staticmethod
+    def createLabel(location):
+        lbl = Label(location,
+                    bg="white",
+                    height=4,
+                    text=f"Remaining Cells: {Cell.remainingCells}")
+
+        Cell.labelObj = lbl
+
+    @staticmethod
+    def randomizeMines():
+        mines = random.sample(Cell.all, settings.MINE_COUNT)
+        for cell in mines:
+            cell.isMine = True

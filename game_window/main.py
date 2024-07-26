@@ -40,7 +40,11 @@ for x in range(settings.GRID_SIZE):
         cell = Cell(x, y)
         cell.createButton(centerFrame)
         cell.buttonObj.grid(row=x, column=y)
-        
+
 Cell.randomizeMines()
+
+Cell.createLabel(leftFrame)
+Cell.labelObj.place(x=0, y=0)
+
 
 root.mainloop()
