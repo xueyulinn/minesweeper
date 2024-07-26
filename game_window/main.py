@@ -35,10 +35,12 @@ centerFrame = Frame(root,
 
 centerFrame.place(x=utils.widthPrct(25), y=utils.heightPrct(25))
 
-for y in range(settings.GRID_SIZE):
-    for x in range(settings.GRID_SIZE):
-        cell = Cell()
+for x in range(settings.GRID_SIZE):
+    for y in range(settings.GRID_SIZE):
+        cell = Cell(x, y)
         cell.createButton(centerFrame)
-        cell.buttonObj.grid(column=y, row=x)
+        cell.buttonObj.grid(row=x, column=y)
+        
+Cell.randomizeMines()
 
 root.mainloop()
