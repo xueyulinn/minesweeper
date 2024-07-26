@@ -46,5 +46,15 @@ Cell.randomizeMines()
 Cell.createLabel(leftFrame)
 Cell.labelObj.place(x=0, y=0)
 
+gameTitle = Label(
+    topFrame,
+    text="MineSweeper",
+    bg="black",
+    fg="white",
+    font=('', 64),
+)
+
+gameTitle.place(x=utils.widthPrct(25), y=0)
+
 
 root.mainloop()

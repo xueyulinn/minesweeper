@@ -1,6 +1,7 @@
 from tkinter import Button, Label
 import settings
 import random
+import ctypes
 
 
 class Cell:
@@ -18,8 +19,8 @@ class Cell:
     def createButton(self, location):
         btn = Button(
             location,
-            width=5,
-            height=1
+            width=8,
+            height=2
         )
 
         btn.bind('<Button-1>', self.leftClick)
@@ -33,8 +34,17 @@ class Cell:
         # print(event)
         self.displayCell()
 
+        self.buttonObj.unbind('<Button-1>')
+        self.buttonObj.unbind('<Button-3>')
+
     def rightClick(self, event):
-        print("I'm right clicked!")
+        if self.buttonObj["bg"] == "orange":
+            self.buttonObj.configure(bg="SystemButtonFace")
+
+        else:
+            self.buttonObj.configure(
+                bg="orange"
+            )
 
     def getCellByAxis(self, x, y):
         # O(n)
@@ -58,6 +68,8 @@ class Cell:
 
     def displayMine(self):
         self.buttonObj.configure(bg="red")
+        ctypes.windll.user32.MessageBoxW(
+            0, 'You clicked on a mine', 'Game Over', 0)
 
     def getSurroundedCells(self):
         surroundedCells = [
@@ -85,17 +97,24 @@ class Cell:
 
     def displayNormalCell(self):
         self.buttonObj.configure(text=f"{self.countMines()}")
+        self.buttonObj.configure(bg="SystemButtonFace")
         Cell.remainingCells -= 1
 
         if Cell.labelObj:
             Cell.labelObj.configure(text=f"Remaining Cells: {
                                     Cell.remainingCells}")
 
+        if Cell.remainingCells == settings.MINE_COUNT:
+            ctypes.windll.user32.MessageBoxW(
+                0, 'Congrats! You won the game!', 'Game Over', 0)
+
     @staticmethod
     def createLabel(location):
         lbl = Label(location,
-                    bg="white",
+                    bg="black",
+                    fg="white",
                     height=4,
+                    font=("", 16),
                     text=f"Remaining Cells: {Cell.remainingCells}")
 
         Cell.labelObj = lbl
