@@ -8,7 +8,7 @@ class Cell:
     all = []
     remainingCells = settings.CELLS
 
-    def __init__(self,  x, y, isMine=False):
+    def __init__(self, x, y, isMine=False):
         self.isMine = isMine
         self.buttonObj = None
         self.x = x
@@ -19,8 +19,8 @@ class Cell:
     def createButton(self, location):
         btn = Button(
             location,
-            width=8,
-            height=2
+            width=2,
+            height=1
         )
 
         btn.bind('<Button-1>', self.leftClick)
@@ -108,16 +108,6 @@ class Cell:
             ctypes.windll.user32.MessageBoxW(
                 0, 'Congrats! You won the game!', 'Game Over', 0)
 
-    @staticmethod
-    def createLabel(location):
-        lbl = Label(location,
-                    bg="black",
-                    fg="white",
-                    height=4,
-                    font=("", 16),
-                    text=f"Remaining Cells: {Cell.remainingCells}")
-
-        Cell.labelObj = lbl
 
     @staticmethod
     def randomizeMines():
