@@ -1,7 +1,6 @@
 from tkinter import *
 import settings
 import utils
-from cell import Cell
 
 # Window configuration
 root = Tk()

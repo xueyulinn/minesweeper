@@ -7,6 +7,8 @@ import ctypes
 class Cell:
     all = []
     remainingCells = settings.CELLS
+    mineCount = settings.MINE_COUNT
+    labelObj = None
 
     def __init__(self, x, y, isMine=False):
         self.isMine = isMine
@@ -39,11 +41,12 @@ class Cell:
 
     def rightClick(self, event):
         if self.buttonObj["bg"] == "orange":
-            self.buttonObj.configure(bg="SystemButtonFace")
+            self.buttonObj.configure(bg="SystemButtonFace", text='')
 
         else:
             self.buttonObj.configure(
-                bg="orange"
+                bg="orange",
+                text='🚩'
             )
 
     def getCellByAxis(self, x, y):
@@ -67,7 +70,7 @@ class Cell:
             self.displayNormalCell()
 
     def displayMine(self):
-        self.buttonObj.configure(bg="red")
+        self.buttonObj.configure(bg="red", text='💣')
         ctypes.windll.user32.MessageBoxW(
             0, 'You clicked on a mine', 'Game Over', 0)
 
@@ -102,15 +105,27 @@ class Cell:
 
         if Cell.labelObj:
             Cell.labelObj.configure(text=f"Remaining Cells: {
-                                    Cell.remainingCells}")
+                Cell.remainingCells}")
 
-        if Cell.remainingCells == settings.MINE_COUNT:
+        if Cell.remainingCells == Cell.mineCount:
             ctypes.windll.user32.MessageBoxW(
                 0, 'Congrats! You won the game!', 'Game Over', 0)
 
+    @staticmethod
+    def displayRemainingsLabel(frame,  cells):
+        lbl = Label(frame,
+                    bg="black",
+                    fg="white",
+                    height=4,
+                    font=("", 16),
+                    text=f"Remaining Cells: {cells}")
+
+        Cell.labelObj = lbl
+
+        lbl.place(x=0, y=0)
 
     @staticmethod
     def randomizeMines():
-        mines = random.sample(Cell.all, settings.MINE_COUNT)
+        mines = random.sample(Cell.all, Cell.mineCount)
         for cell in mines:
             cell.isMine = True

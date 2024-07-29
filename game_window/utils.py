@@ -14,16 +14,24 @@ def heightPrct(prct: float):
 def modifyDifficulty(difficulty: int, cellFrame: Frame, labelFrame: Frame):
     if difficulty == 0:
         settings.GRID_SIZE = 9
+        settings.MINE_COUNT = 10  # Typical for Beginner
     elif difficulty == 1:
         settings.GRID_SIZE = 16
+        settings.MINE_COUNT = 40  # Typical for Intermediate
     elif difficulty == 2:
         settings.GRID_SIZE = 24
+        settings.MINE_COUNT = 99  # Typical for Expert
 
-    settings.MINE_COUNT = settings.GRID_SIZE ** 2 // 4
-    settings.CELLS = settings.GRID_SIZE**2
+    settings.CELLS = settings.GRID_SIZE ** 2
 
+    Cell.all = []
+    Cell.remainingCells = settings.CELLS  # Correctly set remaining cells
     generateCells(cellFrame, settings.GRID_SIZE)
-    displayRemainingsLabel(labelFrame, cells=settings.CELLS)
+    Cell.mineCount = settings.MINE_COUNT
+    Cell.randomizeMines()
+    Cell.displayRemainingsLabel(labelFrame, Cell.remainingCells)  # Pass remaining cells
+
+
 
 
 def generateCells(frame: Frame, gridSize: int):
@@ -34,14 +42,3 @@ def generateCells(frame: Frame, gridSize: int):
             cell.buttonObj.grid(row=x, column=y)
 
     Cell.randomizeMines()
-
-
-def displayRemainingsLabel(frame: Frame, x: int = 0, y: int = 0, cells: int = settings.CELLS):
-    lbl = Label(frame,
-                bg="black",
-                fg="white",
-                height=4,
-                font=("", 16),
-                text=f"Remaining Cells: {cells}")
-
-    lbl.place(x=x, y=y)
