@@ -1,5 +1,7 @@
 # Minesweeper Game
 
+[中文文档](README.zh-CN.md)
+
 A classic Minesweeper game implemented in Python using Tkinter for the graphical user interface.
 
 ## Table of Contents
@@ -74,5 +76,4 @@ Contributions are welcome! Please follow these steps to contribute:
 3. Make your changes and commit them with clear and descriptive commit messages.
 4. Push your changes to your fork.
 5. Submit a pull request explaining your changes.
-
 
